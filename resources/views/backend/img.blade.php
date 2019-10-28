@@ -23,11 +23,10 @@
 
     <div class="row">
       <div class="col s6">
-        @if(isset($msgs))
-        <div class="col s12">
-          <p class="red-text">{{ $msgs }}</p>
-        </div>
-        @endif
+        @error('image')
+        <p class="red-text">{{ $message }}</p>
+        @enderror
+ 
         <div class="col s12 newimg"></div>
         <button class="btn waves-effect waves-light red lighten-1 delete">
           取消
@@ -81,9 +80,9 @@
           <span>不發佈</span>
         </label>
       </div>
-      
-      <div class="col s12"> 
-        
+
+      <div class="col s12">
+
       </div>
 
       <div class="col s12 center">
@@ -95,5 +94,3 @@
   </div>
   @endforeach
   @endsection
-
-  

@@ -28,8 +28,8 @@ class ImageListener
      */
     public function handle(ImageEvent $event)
     {
-        // $request = $event->request;
-        Log::alert('新增照片成功！',["123"]);
+        $CreateImg = $event->CreateImg;
+        Log::alert('新增照片成功！',['id'=>$CreateImg->id]);
 
     }
 }

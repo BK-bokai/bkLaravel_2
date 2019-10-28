@@ -19,9 +19,9 @@ class ImageEvent
      *
      * @return void
      */
-    public function __construct(Request $request)
+    public function __construct($CreateImg)
     {
-        $this->request=$request;
+        $this->CreateImg=$CreateImg;
     }
 
     /**

@@ -26,6 +26,19 @@ class IndexRepository{
       $this->worker         = $worker;
       $this->Image          = $Image;
     }
+
+
+    /**
+     * $data為你需要的資料，選項有Index、student_skills、student、work_skills、worker、Image預設是Index
+     */
+    public function GetAll( $data = 'Index' )
+    {
+        $data = $this->$data->all();
+        return $data;
+    }
+
+    
+
 }
 
 

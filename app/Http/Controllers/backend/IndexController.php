@@ -12,122 +12,129 @@ use App\Model\worker;
 use App\Model\Image;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use App\Services\IndexService;
+use App\EventService\Events\IndexEvent;
 
 
 class IndexController extends Controller
 {
 
+    protected $IndexService;
+
+    public function __construct(IndexService $IndexService)
+    {
+        $this->IndexService = $IndexService;
+    }
+
     function index()
     {
-        $index=Index::all()[0];
-        $student=student::all()[0];
-        $student_skills=student_skills::all();
-        $worker=worker::all()[0];
+        $index = $this->IndexService->GetAll('Index')->first();
+        $student = $this->IndexService->GetAll('student')->first();
+        $student_skills = $this->IndexService->GetAll('student_skills');
+        $worker = $this->IndexService->GetAll('worker')->first();
+        $work_skills = $this->IndexService->GetAll('work_skills');
         $name = Auth::user()->name;
-        $work_skills=work_skills::all();
-        return view('backend/index',compact('index','student','student_skills','worker','work_skills','name'));
+
+        return view('backend/index', compact('index', 'student', 'student_skills', 'worker', 'work_skills', 'name'));
     }
 
     function index_img()
     {
-        // return view('backend.index_img');
-        $images = Image::all();
+        $images = $this->IndexService->GetAll('Image');
         return view('backend.index_img', [
             'images' => $images,
             'name' => Auth::user()->name
         ]);
     }
 
-    function check_index_img(Request $request,Image $image)
+    function check_index_img(Request $request, Image $image)
     {
-        if($image->index == 1)
-        {
+        if ($image->index == 1) {
             return ['change' => 0];
-        }
-        else
-        {
+        } else {
             return ['change' => 1];
         }
-        
+    }
+
+    function checkArticle(Request $request)
+    {
+        $change = $this->IndexService->CheckEdit($request);
+        return $change;
     }
 
     function change_index_img(Request $request)
     {
-        $old_index_image = Image::where('index',1)->first();
-        $new_index_image = Image::where('id',$request->index_img)->first();
-        if($old_index_image == $new_index_image)
-        {
-            return redirect()->route('admin.index_img');
-        }
-        else
-        {
-            $old_index_image->index = 0;
-            $old_index_image->save();
-            $new_index_image->index = 1;
-            $new_index_image->save();
-            return redirect()->route('admin.index_img');
-        }
+        $OldIndexImage = Image::where('index', 1)->first();
+        $NewIndexImage = Image::where('id', $request->index_img)->first();
+
+        $description = '更改首頁照片';
+        $user = Auth::user()->name;
+        event(new IndexEvent($user, $description));
+        return $this->IndexService->CheckChange($OldIndexImage, $NewIndexImage);
     }
 
-    function edit(Request $request,Index $index,student $student,worker $worker)
+    function edit(Request $request, Index $index, student $student, worker $worker)
     {
 
-
-        $index->content_one=$request->index_content_one;
-        $index->content_two=$request->index_content_two;
+        $index->content_one = $request->index_content_one;
+        $index->content_two = $request->index_content_two;
         $index->save();
-        $student->content  =$request->student_content;
+        $student->content  = $request->student_content;
         $student->save();
-        $worker->content   =$request->worker_content;
+        $worker->content   = $request->worker_content;
         $worker->save();
 
-        return $request->index_content_two;
+        $description = '更改首頁文章';
+        $user = Auth::user()->name;
+        event(new IndexEvent($user, $description));
+
+        return ['changed'];
     }
 
     function add_student_skill(Request $request)
-    {   
-        Validator::make($request->all(), [
-            'student_skill' => ['required', 'string', 'max:255'],
-        ], [
-            'student_skill.required'    => '請輸入技能名稱。',
-        ])->validate();
-
-        // student_skills::create(['skill_name' => $request->student_skill]);
-        $student_skills=new student_skills;
+    {
+        $this->IndexService->StudentSkillValidator($request->all())->validate();
+        $student_skills = new student_skills;
         $student_skills->skill_name = $request->student_skill;
         $student_skills->save();
+        $description = '新增學生技能';
+        $user = Auth::user()->name;
+        event(new IndexEvent($user, $description));
 
         return redirect()->route('admin.index');
     }
 
 
-    function del_student_skill(Request $request,student_skills $student_skill)
+    function del_student_skill(Request $request, student_skills $student_skill)
     {
         $student_skill->delete();
+        $description = '刪除學生技能';
+        $user = Auth::user()->name;
+        event(new IndexEvent($user, $description));
         return ['finish'];
     }
 
     function add_work_skill(Request $request)
     {
-        Validator::make($request->all(), [
-            'work_skill' => ['required', 'string', 'max:255'],
-        ], [
-            'work_skill.required'    => '請輸入技能名稱。',
-        ])->validate(); 
-        
-        $work_skills=new work_skills;
+
+        $this->IndexService->WorkSkillValidator($request->all())->validate();
+
+        $work_skills = new work_skills;
         $work_skills->skill_name = $request->work_skill;
         $work_skills->save();
-
+        $description = '新增工作技能';
+        $user = Auth::user()->name;
+        event(new IndexEvent($user, $description));
         return redirect()->route('admin.index');
     }
 
 
-    function del_work_skill(Request $request,work_skills $work_skill)
-    {   
+    function del_work_skill(Request $request, work_skills $work_skill)
+    {
         $work_skill->delete();
+        $description = '刪除工作技能';
+        $user = Auth::user()->name;
+        event(new IndexEvent($user, $description));
         return ['finish'];
     }
-
-
 }

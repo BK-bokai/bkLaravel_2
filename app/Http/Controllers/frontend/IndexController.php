@@ -10,19 +10,25 @@ use App\Model\work_skills;
 use App\Model\worker;
 use App\Model\Index;
 use App\Model\Image;
+use App\Services\IndexService;
 
 
 
 
 class IndexController extends Controller
 {
+    protected $IndexService;
+    public function __construct(IndexService $IndexService)
+    {
+        $this->IndexService = $IndexService;
+    }
     function index()
     {
-        $index=Index::all()[0];
-        $student=student::all()[0];
-        $student_skills=student_skills::all();
-        $worker=worker::all()[0];
-        $work_skills=work_skills::all();
+        $index=$this->IndexService->GetAll('Index')->first();
+        $student=$this->IndexService->GetAll('student')->first();
+        $student_skills=$this->IndexService->GetAll('student_skills');
+        $worker=$this->IndexService->GetAll('worker')->first();
+        $work_skills=$this->IndexService->GetAll('work_skills');
         $image = Image::where('index',1)->first();
         $image = explode("\\", $image->image_path);
         $image = end($image);

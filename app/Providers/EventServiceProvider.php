@@ -23,6 +23,10 @@ class EventServiceProvider extends ServiceProvider
             'App\EventService\Listeners\LoginListener'
         ],
 
+        'App\EventService\Events\IndexEvent' => [
+            'App\EventService\Listeners\IndexListener'
+        ],
+
         'App\EventService\Events\ImageEvent' => [
             'App\EventService\Listeners\ImageListener'
         ],

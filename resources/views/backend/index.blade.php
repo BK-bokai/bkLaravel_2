@@ -17,7 +17,7 @@
         <div class="row Content">
             <div class="col s12">
                 <div class="input-field col s12">
-                    <textarea name="index_content_one" id="photoContent1"
+                    <textarea name="index_content_one" id="photoContent1" url="{{route('admin.check_article')}}"
                         class="materialize-textarea">{{ $index->content_one }}</textarea>
                     <label for="photoContent1">第一段</label>
                 </div>
@@ -25,13 +25,13 @@
 
             <div class="col s12">
                 <div class="input-field col s12">
-                    <textarea name="index_content_two" id="photoContent2"
+                    <textarea name="index_content_two" id="photoContent2" url="{{route('admin.check_article')}}"
                         class="materialize-textarea">{{ $index->content_two }}</textarea>
                     <label for="photoContent2">第二段</label>
                 </div>
 
                 <button url="{{route('admin.index_edit',['index' => 1,'student' => 1,'worker' => 1])}}"
-                    id="index_submit" class="btn waves-effect waves-light " name="action">存檔
+                    id="index_submit" class="btn waves-effect waves-light disabled" name="action">存檔
                     <i class="fas fa-save"></i>
                 </button>
             </div>
@@ -44,7 +44,7 @@
         <div class="row Content">
             <div class="col s12">
                 <div class="input-field col s12">
-                    <textarea name="student_content" id="studentContent"
+                    <textarea name="student_content" id="studentContent" url="{{route('admin.check_article')}}"
                         class="materialize-textarea">{{ $student->content }}</textarea>
                     <label for="studentContent">第一段</label>
                 </div>
@@ -52,7 +52,7 @@
 
             <div class="col s12">
                 <div class="input-field col s12">
-                    <textarea name="worker_content" id="workContent"
+                    <textarea name="worker_content" id="workContent" url="{{route('admin.check_article')}}"
                         class="materialize-textarea">{{ $worker->content }}</textarea>
                     <label for="workContent">第二段</label>
                 </div>

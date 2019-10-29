@@ -5,6 +5,46 @@ $(document).ready(function () {
     window.location.href = url;
   })
 
+
+  $("textarea[name='index_content_one'],textarea[name='index_content_two'],textarea[name='student_content'],textarea[name='worker_content']").on('keyup', function () {
+    let url = $(this).attr('url');
+    let index_content_one = $("textarea[name='index_content_one']").val();
+    let index_content_two = $("textarea[name='index_content_two']").val();
+    let student_content = $("textarea[name='student_content']").val();
+    let worker_content = $("textarea[name='worker_content']").val();
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      type: "POST",
+      url: url,
+      data: {
+        index_content_one: index_content_one,
+        index_content_two: index_content_two,
+        student_content: student_content,
+        worker_content: worker_content,
+      },
+      dataType: 'json',
+      success: function (data) {
+        console.log(data);
+        console.log("ajax success");
+        
+        if(data['change']==1)
+        {
+          $("button#index_submit").removeClass('disabled');
+        }
+        else
+        {
+          $("button#index_submit").addClass('disabled');
+        }
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log(xhr.responseText);
+      }
+    })
+
+  })
+
   $('button#index_submit').on('click', function () {
     let index_content_one = $("textarea[name='index_content_one']").val();
     let index_content_two = $("textarea[name='index_content_two']").val();
@@ -28,6 +68,8 @@ $(document).ready(function () {
       success: function (data) {
         console.log(data);
         console.log("ajax success");
+        window.location.reload();
+
       },
       error: function (xhr, ajaxOptions, thrownError) {
         console.log(xhr.responseText);

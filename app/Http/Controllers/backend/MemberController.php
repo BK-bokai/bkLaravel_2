@@ -9,11 +9,18 @@ use Illuminate\Support\Facades\Validator;
 use App\Model\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Session;
+use App\Services\MemberService;
 
 
 class MemberController extends Controller
 {
+    protected $MemberService;
+
+    public function __construct(MemberService $MemberService)
+    {
+        $this->MemberService = $MemberService;
+    }
+
     public function index()
     {
         $members = User::All();
@@ -30,14 +37,13 @@ class MemberController extends Controller
 
     public function showMember(User $user)
     {
-        // $members = User::All();
         $name = Auth::user()->name;
         return view('backend/editmember', compact('name', 'user'));
     }
 
     public function editMember(Request $request, User $user)
     {
-        $this->edit_validator($request->all())->validate();
+        $this->MemberService->edit_validator($request->all())->validate();
         $user->name = $request->name;
         $user->username = $request->username;
         $user->email = $request->email;
@@ -52,15 +58,12 @@ class MemberController extends Controller
         $user_name    = User::where('name', $request->name)->first();
         $user_username = User::where('username', $request->username)->first();
         $user_email   = User::where('email', $request->email)->first();
-        //create the random activasion code
         if ($user_name != null || $user_username != null || $user_email != null) {
-            return $this->confirm($request);
+            return $this->MemberService->confirm($request);
         }
 
-        // $activasion = md5(uniqid(rand(), true));
         $request['active'] = 'active';
-
-        $this->validator($request->all())->validate();
+        $this->MemberService->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
         return redirect()->route('admin.addmember')
@@ -79,135 +82,13 @@ class MemberController extends Controller
 
 
     public function check(Request $request, User $user)
-    {
+    {   
         $check=[];
-        $users_name = User::where('id', '!=', $user->id)
-            ->where('name', '=', $request->name)->get();
-        $users_username = User::where('id', '!=', $user->id)
-            ->where('username', '=', $request->username)->get();
-        $users_email = User::where('id', '!=', $user->id)
-            ->where('email', '=', $request->email)->get();
-
-        if(count($users_name)==0 && count($users_username)==0 && count($users_email)==0)
-        {
-            $check['repeat'] = 0;
-        }
-        else
-        {
-            $check['repeat'] = 1;
-            $check['repeat_name']= (count($users_name) > 0)? 1:0;
-            $check['repeat_username']= (count($users_username) > 0)? 1:0;
-            $check['repeat_email']= (count($users_email) > 0)? 1:0;
-            
-
-        }
-
-        if( $request->name != $user->name || 
-            $request->username != $user->username ||
-            $request->email != $user->email ||
-            $request->level != $user->level)
-        {
-                $check['change'] = 1;
-        }
-        else
-        {
-            $check['change'] = 0;
-        }
-        
-        // return ['repeat' => count($users), 'change' => $oldname];
+        // 將$request的內容與$user比較，看是否有更改以及是否與其他資料重複
+        $check=$this->MemberService->checkUser($request,$user);
         return $check;
     }
 
-
-    /**
-     * 確認輸入的資料
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'student_skill' => ['required', 'string', 'max:255'],
-        ], [
-            'student.required'    => '請輸入技能名稱。',
-        ]);
-    }
-
-        /**
-     * 確認輸入的資料
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function edit_validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'level' => ['required'],
-        ], [
-            'name.required'    => '請輸入使用者名稱。',
-            'username.required'    => '請輸入帳號。',
-            'email.email'    => '請輸入正確的信箱。',
-            'email.required'    => '請輸入信箱。',
-        ]);
-    }
-
-
-    /**
-     * 確認資料庫是否有重複註冊
-     */
-
-    private function confirm(Request $request)
-    {
-        $user_name    = User::where('name', $request->name)->first();
-        $user_username = User::where('username', $request->username)->first();
-        $user_email   = User::where('email', $request->email)->first();
-        // Check if user was successfully loaded, that the password matches
-        // and active is not 1. If so, override the default error message.
-        if ($user_name != null || $user_username != null || $user_email != null) {
-            if ($user_name != null) {
-                $errors = ['name' => '此使用者名稱已被使用過!'];
-            };
-
-            if ($user_username != null) {
-                $errors = ['username' => '此帳號已被使用過!'];
-            };
-
-            if ($user_email != null) {
-                $errors = ['email' => '此信箱已被註冊!'];
-            };
-
-            if ($user_name != null && $user_username != null) {
-                $errors = ['name' => '此使用者名稱已被使用過!', 'username' => '此帳號已被使用過!'];
-            };
-
-            if ($user_name != null && $user_email != null) {
-                $errors = ['name' => '此使用者名稱已被使用過!', 'email' => '此信箱已被註冊!'];
-            };
-
-            if ($user_username != null && $user_email != null) {
-                $errors = ['username' => '此帳號已被使用過!', 'email' => '此信箱已被註冊!'];
-            };
-
-            if ($user_name != null && $user_username != null && $user_email != null) {
-                $errors = ['name' => '此使用者名稱已被使用過!', 'username' => '此帳號已被使用過!', 'email' => '此信箱已被註冊!'];
-            };
-
-            return redirect()->back()
-                ->withInput($request->only('username', 'remember'))
-                ->withErrors($errors);
-        };
-
-
-        if ($request->expectsJson()) {
-            return response()->json($errors, 422);
-        };
-
-        return false;
-    }
 
     /**
      * Create a new user instance after a valid registration.

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Model\User;
+use App\Services\LoginService;
 use Illuminate\Validation\Validator;
 use App\EventService\Events\LoginEvent;
 
@@ -23,6 +24,23 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+
+
+
+    protected $LoginService;
+
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(LoginService $LoginService)
+    {
+        $this->middleware('guest')->except('logout');
+        $this->LoginService = $LoginService;
+    }
+
 
     /**
      * Show the application's login form.
@@ -46,42 +64,12 @@ class LoginController extends Controller
     }
 
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
 
     public function username()
     {
         return 'username';
     }
 
-    /**
-     * Validate the user login request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function validateLogin(Request $request)
-    {
-        $request->validate(
-            [
-                $this->username() => 'required|string',
-                'password' => 'required|string',
-            ],
-            [
-                'username.required'    => '請輸入帳號。',
-                'password.required' => '請輸入密碼。',
-            ]
-        );
-    }
 
     /**
      * Attempt to log the user into the application.
@@ -104,25 +92,7 @@ class LoginController extends Controller
         return false;
     }
 
-    // protected function attemptLogin(Request $request)
-    // {
-    //     //$active_user 找尋資料庫中是否有此帳號被啟動的資料
-    //     $active_user = User::where($this->username(), $request->username)
-    //         ->where('active', 'active')->first();
-    //     if ($active_user !== null) {
-    //         //若有資料，利用attempt方法去比對帳號密碼，若正確，laravel會將帳密資訊儲存在session,
-    //         //第二個參數為布林值，若為trun，laravel會在資料庫的remeber_token紀錄。
-    //         return $this->guard()->attempt(
-    //             [
-    //                 $this->username() => $request->username,
-    //                 'password' => $request->password
-    //             ],
-    //             $request->remember
-    //         );
-    //     }
-    //     //無此使用者資料直接回傳false
-    //     return false;
-    // }
+
 
     /**
      * Get the failed login response instance.
@@ -161,11 +131,9 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
-        $this->validateLogin($request);
+        
+        $this->LoginService->validateLogin($request);
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
         //$this裡面是否存在'hasTooManyLoginAttempts'方法，查詢帳號是否被鎖
         if (
             method_exists($this, 'hasTooManyLoginAttempts') &&
@@ -176,15 +144,6 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        // $user = User::where($this->username(), $request->username)->first();
-        // if (!empty($user)) {
-        //     if ($user->active !== 'active') {
-        //         $this->incrementLoginAttempts($request);
-        //         return redirect()->route('login')->withErrors([
-        //             'active' => '此帳號並未被啟動，若已完成註冊動作，請確認信箱!',
-        //         ]);
-        //     }
-        // }
 
         if ($this->attemptLogin($request)) {
             //使用上面attemptLogin方法，若回傳true則導入後台

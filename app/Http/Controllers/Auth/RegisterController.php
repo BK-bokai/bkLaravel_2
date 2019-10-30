@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\frontend\RegisterEmailController;
+use App\Services\RegisterService;
 
 class RegisterController extends Controller
 {
@@ -27,17 +27,26 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
+    protected $RegisterService;
+
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(RegisterService $RegisterService)
+    {
+        $this->middleware('guest');
+        $this->RegisterService = $RegisterService;
+    }
+
+
     public function showRegistrationForm()
     {
         return view('frontend.register');
     }
 
-
-    public function test(Request $request)
-    {
-        $this->validator($request->all())->validate();
-        return $request;
-    }
 
     /**
      * Where to redirect users after registration.
@@ -48,48 +57,10 @@ class RegisterController extends Controller
 
     protected function redirectTo()
     {
-        // $success='註冊成功，請至信箱收取確認信';
         return route('login');
-        // return route('register')->with('success');
     }
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'password_confirmation' => [ 'same:password'],
-            'level' => ['required'],
-            'active' => ['required']
-        ], [
-            'name.required'    => '請輸入使用者名稱。',
-            'username.required'    => '請輸入帳號。',
-            'email.email'    => '請輸入正確的信箱。',
-            'email.required'    => '請輸入信箱。',
-            'password.required' => '請輸入最少8碼的密碼。',
-            'password.min' => '請輸入最少8碼的密碼。',
-            'password_confirmation.same' => '兩次密碼不相同。',
-            'password.confirmed' => '兩次密碼不相同。',
-        ]);
-    }
 
     /**
      * Create a new user instance after a valid registration.
@@ -109,58 +80,6 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * 確認資料庫是否有重複註冊
-     */
-
-    private function confirm(Request $request)
-    {
-        $user_name    = User::where('name', $request->name)->first();
-        $user_username = User::where('username', $request->username)->first();
-        $user_email   = User::where('email', $request->email)->first();
-        // Check if user was successfully loaded, that the password matches
-        // and active is not 1. If so, override the default error message.
-        if ($user_name != null || $user_username != null || $user_email != null) {
-            if ($user_name != null) {
-                $errors = ['name' => '此使用者名稱已被使用過!'];
-            };
-
-            if ($user_username != null) {
-                $errors = ['username' => '此帳號已被使用過!'];
-            };
-
-            if ($user_email != null) {
-                $errors = ['email' => '此信箱已被註冊!'];
-            };
-
-            if ($user_name != null && $user_username != null) {
-                $errors = ['name' => '此使用者名稱已被使用過!','username' => '此帳號已被使用過!'];
-            };
-
-            if ($user_name != null && $user_email != null) {
-                $errors = ['name' => '此使用者名稱已被使用過!','email' => '此信箱已被註冊!'];
-            };
-
-            if ($user_username != null && $user_email != null) {
-                $errors = ['username' => '此帳號已被使用過!','email' => '此信箱已被註冊!'];
-            };
-
-            if ($user_name != null && $user_username != null && $user_email != null) {
-                $errors = ['name' => '此使用者名稱已被使用過!','username' => '此帳號已被使用過!','email' => '此信箱已被註冊!'];
-            };
-
-            return redirect()->back()
-                ->withInput($request->only('username', 'remember'))
-                ->withErrors($errors);
-        };
-
-
-        if ($request->expectsJson()) {
-            return response()->json($errors, 422);
-        };
-
-        return false;
-    }
 
 
     /**
@@ -176,21 +95,21 @@ class RegisterController extends Controller
         $user_email   = User::where('email', $request->email)->first();
         //create the random activasion code
         if ($user_name != null || $user_username != null || $user_email != null) {
-            return $this->confirm($request);
+            return $this->RegisterService->confirm($request);
         }
         $activasion = md5(uniqid(rand(), true));
         $request['active'] = $activasion;
 
-        $this->validator($request->all())->validate();
+
+        $this->RegisterService->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
 
-        // $this->guard()->login($user);
         Session::put('success', '註冊成功，請至信箱收取確認信');
         Session::put('name', $request->name);
         Session::put('email', $request->email);
-        $mail = new RegisterEmailController($activasion);
-        $mail->send();
+
+        $this->RegisterService->send($activasion);
 
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());

@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use App\Services\ResetPasswordService;
+use Auth;
 
 class ForgotPasswordController extends Controller
 {
@@ -22,15 +24,18 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+    protected $ResetPasswordService;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ResetPasswordService $ResetPasswordService)
     {
         $this->middleware('guest');
+        $this->ResetPasswordService = $ResetPasswordService;
+
     }
 
     public function showLinkRequestForm()
@@ -38,29 +43,8 @@ class ForgotPasswordController extends Controller
         return view('frontend.ForgetPw');
     }
 
-    // public function showLinkRequestForm()
-    // {
-    //     return view('auth.passwords.email');
-    // }
 
-    /**
-     * Validate the email for the given request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     */
-    protected function validateEmail(Request $request)
-    {
-        $request->validate(
-            [
-                'email' => 'required|email'
-            ],
-            [
-                'email.required' => "請輸入正確的Email",
-                'email.email' => "請輸入正確的Email",
-            ]
-        );
-    }
+
 
     /**
      * Get the broker to be used during password reset.
@@ -99,42 +83,7 @@ class ForgotPasswordController extends Controller
     }
 
 
-    /**
-     * Send a password reset link to a user.
-     *
-     * @param  array  $credentials
-     * @return string
-     */
-    public function sendResetLink($email)
-    {
-        // First we will check to see if we found a user at the given credentials and
- 
-        // if we did not we will redirect back to this current URI with a piece of
-        // "flash" data in the session to indicate to the developers the errors.
-        $user = User::where('email', $email)->first();
-        $tokens = md5(uniqid(rand(), true));
-
-        //把token update到此user的資料庫裡面
-
-        if (is_null($user)) {
-            return false;
-        }
-        else{
-            $id=$user['id'];
-            $user = User::find($id);
-            $user->reset_token=$tokens;
-            $user->save();
-        }
-
-        // Once we have the reset token, we are ready to send the message out to this
-        // user with a link to reset their password. We will then redirect back to
-        // the current URI having nothing set in the session to indicate errors.
-
-        $user->sendPasswordResetNotification("{$tokens}?email={$email}");
-
-        return true;
-    }
-
+    
 
     /**
      * Send a reset link to the given user.
@@ -145,15 +94,13 @@ class ForgotPasswordController extends Controller
     public function sendResetLinkEmail(Request $request)
     {
         //驗證email
-        $this->validateEmail($request);
+        $this->ResetPasswordService->validateEmail($request);
 
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
 
-        //發送Email  sendResetLink是PasswordBroker 裡面的一個方法
-        $response = $this->sendResetLink($request->email);
-
+        $response = $this->ResetPasswordService->sendResetLink($request->email);
         //將發送Email返回的狀態送給前端
         return $response == Password::RESET_LINK_SENT
             ? $this->sendResetLinkResponse($request, $response)

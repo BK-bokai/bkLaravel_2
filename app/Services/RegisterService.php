@@ -103,8 +103,11 @@ class RegisterService
         return false;
     }
 
-    public function send($activasion)
+    public function send($activasion,$request)
     {
+        Session::put('success', '註冊成功，請至信箱收取確認信');
+        Session::put('name', $request->name);
+        Session::put('email', $request->email);
         /**
          * 方法1
          */
@@ -123,5 +126,13 @@ class RegisterService
         // echo (new Warning($data))->render();die;
 
         Mail::to($to)->send(new register($MailBody));
+    }
+
+    public function sendServer($user,$request,$activasion)
+    {
+        Session::put('success', '註冊成功，請至信箱收取確認信');
+        Session::put('name', $request->name);
+        Session::put('email', $request->email);
+        $user->sendRegisterNotification($activasion);
     }
 }

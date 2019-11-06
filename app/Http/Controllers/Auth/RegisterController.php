@@ -105,11 +105,8 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        Session::put('success', '註冊成功，請至信箱收取確認信');
-        Session::put('name', $request->name);
-        Session::put('email', $request->email);
-
-        $this->RegisterService->send($activasion);
+        // $this->RegisterService->send($activasion,$request);
+        $this->RegisterService->sendServer($user,$request,$activasion);
 
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());

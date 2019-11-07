@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\MemberRepository;
 use App\Model\User;
 use Illuminate\Support\Facades\Validator;
+use App\Jobs\SendResetMail;
 
 class ResetPasswordService
 {
@@ -59,15 +60,14 @@ class ResetPasswordService
         if (is_null($user)) {
             return false;
         } else {
-            $id = $user['id'];
-            $user = User::find($id);
             $user->reset_token = $tokens;
             $user->save();
             // Once we have the reset token, we are ready to send the message out to this
             // user with a link to reset their password. We will then redirect back to
             // the current URI having nothing set in the session to indicate errors.
+            dispatch(new SendResetMail($email,"{$tokens}?email={$email}"));
 
-            $user->sendPasswordResetNotification("{$tokens}?email={$email}");
+            // $user->sendPasswordResetNotification("{$tokens}?email={$email}");
             return true;
         }
 

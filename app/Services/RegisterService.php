@@ -8,6 +8,7 @@ use App\Model\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\register;
 use Illuminate\Support\Facades\Session;
+use App\Jobs\SendRegisterMail;
 
 class RegisterService
 {
@@ -128,11 +129,10 @@ class RegisterService
         Mail::to($to)->send(new register($MailBody));
     }
 
-    public function sendServer($user,$request,$activasion)
+
+    public function sendServer($email,$activasion)
     {
         Session::put('success', '註冊成功，請至信箱收取確認信');
-        Session::put('name', $request->name);
-        Session::put('email', $request->email);
-        $user->sendRegisterNotification($activasion);
+        dispatch(new SendRegisterMail($email,$activasion));
     }
 }

@@ -106,7 +106,8 @@ class RegisterController extends Controller
         event(new Registered($user = $this->create($request->all())));
 
         // $this->RegisterService->send($activasion,$request);
-        $this->RegisterService->sendServer($user,$request,$activasion);
+
+        $this->RegisterService->sendServer($user->email,$activasion);
 
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());

@@ -14,6 +14,7 @@
 Route::get('/', 'frontend\IndexController@index')->name('index');
 Route::get('/images', 'frontend\ImgController@index')->name('images');
 
+Route::get('test','frontend\IndexController@test');
 
 
 
@@ -33,6 +34,8 @@ Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm'
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+
+
 
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

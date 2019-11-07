@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2019-10-17 11:50:45
+-- 產生時間： 2019-11-06 06:57:36
 -- 伺服器版本： 10.3.16-MariaDB
 -- PHP 版本： 7.3.7
 
@@ -47,6 +47,7 @@ CREATE TABLE `images` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `image_path` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `publish` int(11) NOT NULL,
+  `index` int(1) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -55,11 +56,15 @@ CREATE TABLE `images` (
 -- 傾印資料表的資料 `images`
 --
 
-INSERT INTO `images` (`id`, `image_path`, `publish`, `created_at`, `updated_at`) VALUES
-(12, 'C:\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\圖片1.jpg', 1, '2019-09-14 21:09:59', '2019-09-14 21:09:59'),
-(42, 'C:\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\IMAG1384.jpg', 1, '2019-09-26 06:48:16', '2019-09-26 06:48:16'),
-(43, 'C:\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\IMAG1161.jpg', 0, '2019-09-26 06:48:27', '2019-10-03 13:13:39'),
-(44, 'C:\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\IMAG1558.jpg', 0, '2019-09-26 06:49:04', '2019-10-03 13:08:27');
+INSERT INTO `images` (`id`, `image_path`, `publish`, `index`, `created_at`, `updated_at`) VALUES
+(42, 'D:\\bokai\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\198DBE15-6CD4-4B19-AFFA-99534C4B87F2.jpeg', 1, NULL, '2019-09-26 06:48:16', '2019-09-26 06:48:16'),
+(43, 'D:\\bokai\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\32C3B735-C85E-4A71-BC4D-6C9CB779D727.jpeg', 1, 0, '2019-09-26 06:48:27', '2019-10-28 07:22:22'),
+(44, 'D:\\bokai\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\95C5E4C0-361E-4113-9A8D-7E386B84DB63.jpeg', 1, 0, '2019-09-26 06:49:04', '2019-10-29 03:32:55'),
+(49, 'D:\\bokai\\xampp\\htdocs\\php\\bkLaravel_2\\public\\img\\500x499x2_5.jpg.pagespeed.ic.AZSU-r27td.jpg', 0, 0, '2019-10-28 07:22:41', '2019-10-29 03:25:20'),
+(50, 'D:\\bokai\\xampp\\htdocs\\php\\bkLaravel_2\\public\\img\\54911.jpg', 1, 0, '2019-10-28 07:57:23', '2019-10-29 03:30:24'),
+(51, 'D:\\bokai\\xampp\\htdocs\\php\\bkLaravel_2\\public\\img\\3437613_784054b8ab4ea1964e69baecdca43583.jpg', 1, NULL, '2019-10-28 07:59:01', '2019-10-28 07:59:01'),
+(52, 'D:\\bokai\\xampp\\htdocs\\php\\bkLaravel_2\\public\\img\\11219578_1071179139567637_4411838931098917769_n.jpg', 1, 0, '2019-10-28 08:01:25', '2019-10-29 03:26:06'),
+(53, 'D:\\bokai\\xampp\\htdocs\\php\\bkLaravel_2\\public\\img\\紫爆.jpg', 1, 1, '2019-10-28 09:08:38', '2019-10-29 03:32:55');
 
 -- --------------------------------------------------------
 
@@ -84,7 +89,7 @@ CREATE TABLE `index_photo` (
 --
 
 INSERT INTO `index_photo` (`id`, `title`, `photo_path`, `username`, `userid`, `content_one`, `content_two`, `created_at`, `updated_at`) VALUES
-(1, '去夏威夷玩時的照片', 'C:\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\圖片1.jpg', 'Bokai', 1, '大學以及研究所就讀大氣科學系，除了簡單的天氣分析以及預報外，也同時 學到許多在於研究以及應用上的知識與技巧，如：空氣汙染概論、大氣動力學、天氣學、數值天氣預報、大氣測計學等ssss。', '大學期間擔任過校內氣象台的主播，加強對於天氣預報及天氣分析的訓練，不只要將未來的天氣概況做個簡單的預報，並要練習上台講話的台風。研究所期間與實驗室同仁一同參與過許多大大小小的實驗計畫，如西南氣流實驗及雙北暴雨實驗，這些經驗令我體會團隊合作以及團隊討論是進步最快的捷徑ssss。', '2019-08-09 04:14:25', '2019-10-17 09:43:38');
+(1, '去夏威夷玩時的照片', 'C:\\xampp\\htdocs\\php\\bkLaravel\\public\\img\\圖片1.jpg', 'Bokai', 1, '大學以及研究所就讀大氣科學系，除了簡單的天氣分析以及預報外，也同時 學到許多在於研究以及應用上的知識與技巧，如：空氣汙染概論、大氣動力學、天氣學、數值天氣預報、大氣測計學等e。', '大學期間擔任過校內氣象台的主播，加強對於天氣預報及天氣分析的訓練，不只要將未來的天氣概況做個簡單的預報，並要練習上台講話的台風。研究所期間與實驗室同仁一同參與過許多大大小小的實驗計畫，如西南氣流實驗及雙北暴雨實驗，這些經驗令我體會團隊合作以及團隊討論是進步最快的捷徑。', '2019-08-09 04:14:25', '2019-10-29 08:01:14');
 
 -- --------------------------------------------------------
 
@@ -224,7 +229,7 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `content`, `modify_date`, `created_at`, `updated_at`) VALUES
-(1, '研究所期間，除了參加實驗計劃，同時也要資料的處理及分析，因此需要學習程式語言，系上的關系，我們需要在Linux系統下使用shell script、Fortran及GRADS等語言去處理資料及繪圖，在處理資料的過程中，我發現我對於程式語言充滿了興趣，喜歡專研程式技術勝過於學術上的學習ssss。', NULL, '2019-08-09 05:14:15', '2019-10-17 09:43:28');
+(1, '研究所期間，除了參加實驗計劃，同時也要資料的處理及分析，因此需要學習程式語言，系上的關系，我們需要在Linux系統下使用shell script、Fortran及GRADS等語言去處理資料及繪圖，在處理資料的過程中，我發現我對於程式語言充滿了興趣，喜歡專研程式技術勝過於學術上的學習。', NULL, '2019-08-09 05:14:15', '2019-10-18 03:57:33');
 
 -- --------------------------------------------------------
 
@@ -245,8 +250,7 @@ CREATE TABLE `student_skills` (
 
 INSERT INTO `student_skills` (`id`, `skill_name`, `created_at`, `updated_at`) VALUES
 (2, 'Fortran', '2019-08-09 03:10:00', NULL),
-(3, 'GRADS', '2019-08-09 05:13:13', NULL),
-(8, 'shell script', '2019-08-13 21:11:55', NULL);
+(3, 'GRADS', '2019-08-09 05:13:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -274,9 +278,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `username`, `email`, `password`, `active`, `remember_token`, `reset_token`, `level`, `created_at`, `updated_at`) VALUES
 (1, '', 'admin', '', '$2y$10$ANv/TnPhzaqOwey.frx0NOBmucwDWfp9yhrMk05.kWUGCDYzG8X4G', '0', NULL, NULL, 0, NULL, NULL),
-(30, 'bokai', 'bokai', 'bokai830124@gmail.com', '$2y$10$E5ehMG.x8XPYQ2Kq5o3KGOYx8UkgpAtn/dZzZ2p.WzbsqoUnQms/q', 'active', NULL, NULL, 3, '2019-10-03 14:45:41', '2019-10-03 14:45:58'),
-(35, 'tesrt', 'dsadas', 'wd@sda.sadsa', '$2y$10$mPeWTdfZL4QA3I9oiFKq2e3M3tYnruzRoceMlDnp1r2FtHuPxVTBe', 'active', NULL, NULL, 3, '2019-10-08 03:57:11', '2019-10-08 03:57:11'),
-(38, 'root', 'root', 'we@wee.ewqwe', '$2y$10$kHyyBDZit.yD44LZlgRrTudQ.q855TLh56Kjmz8slFiLyYxDcrsEO', 'active', NULL, NULL, 1, '2019-10-08 09:05:21', '2019-10-08 09:05:21');
+(30, 'bokai', 'bokai', 'bokai830124@gmail.com.test2', '$2y$10$E5ehMG.x8XPYQ2Kq5o3KGOYx8UkgpAtn/dZzZ2p.WzbsqoUnQms/q', 'active', 'EzaudBC5EGbpYRl7CTe9vzNrSLMhEYVBBbYB3oOWZUoFXn2Bf28fEbeARhUu', NULL, 3, '2019-10-03 14:45:41', '2019-10-03 14:45:58'),
+(35, 'tesrt', 'dsadas', 'wd@sda', '$2y$10$mPeWTdfZL4QA3I9oiFKq2e3M3tYnruzRoceMlDnp1r2FtHuPxVTBe', 'active', NULL, NULL, 3, '2019-10-08 03:57:11', '2019-10-29 08:34:36'),
+(44, 'bokaibokai', 'bokaibokai', 'bokai830124@gmail.com', '$2y$10$znVOHF2OpSYWYBekJkHuH.yXXtkLXELsKb4ZopoKqWhJYzoJar4Qq', 'active', NULL, 'have reseted', 3, '2019-11-06 03:08:04', '2019-11-06 04:18:00');
 
 -- --------------------------------------------------------
 
@@ -297,7 +301,7 @@ CREATE TABLE `worker` (
 --
 
 INSERT INTO `worker` (`id`, `content`, `modify_date`, `created_at`, `updated_at`) VALUES
-(1, '退伍出社會後，也順利的進入到現在公司(景丰科技)， 在公司內主要是在Linux系統下建置Weather Research and Forecasting model(WRF model)， 並利用學校所學，處理氣象及WRF model資料，在工作期間我對於程式語言的熱情不減反增， 因此開始自學HTML、CSS、Javascript、Jquery、PHP，並同時使用這些工具開始練習寫一些網站sssss。', NULL, '2019-08-09 03:08:12', '2019-10-17 09:43:41');
+(1, '退伍出社會後，也順利的進入到現在公司(景丰科技)， 在公司內主要是在Linux系統下建置Weather Research and Forecasting model(WRF model)， 並利用學校所學，處理氣象及WRF model資料，在工作期間我對於程式語言的熱情不減反增， 因此開始自學HTML、CSS、Javascript、Jquery、PHP，並同時使用這些工具開始練習寫一些網站。', NULL, '2019-08-09 03:08:12', '2019-10-18 03:57:33');
 
 -- --------------------------------------------------------
 
@@ -320,8 +324,7 @@ INSERT INTO `work_skills` (`id`, `skill_name`, `created_at`, `updated_at`) VALUE
 (1, 'HTML', '2019-08-09 03:09:12', NULL),
 (2, 'CSS', '2019-08-09 04:13:11', NULL),
 (3, 'Javascript', '2019-08-09 04:10:12', NULL),
-(4, 'Jquery', '2019-08-09 03:06:11', NULL),
-(5, 'PHP', '2019-08-09 02:08:09', NULL);
+(4, 'Jquery', '2019-08-09 03:06:11', NULL);
 
 --
 -- 已傾印資料表的索引
@@ -420,7 +423,7 @@ ALTER TABLE `failed_jobs`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `index_photo`
@@ -462,13 +465,13 @@ ALTER TABLE `student`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `student_skills`
 --
 ALTER TABLE `student_skills`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=50;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `worker`
@@ -480,7 +483,7 @@ ALTER TABLE `worker`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `work_skills`
 --
 ALTER TABLE `work_skills`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=11;
 
 --
 -- 已傾印資料表的限制式

@@ -45,16 +45,17 @@ class IndexController extends Controller
     {
      
 
-        $redis = app('redis.connection');
-        return $redis->lrange('queues:$queueName', 0, -1);
+        // $redis = app('redis.connection');
+        // return $redis->lrange('queues:$queueName', 0, -1);
 
 
 
-        // $request['name']="bokai";
-        // $request['email']="bokai830124@gmail.com";
-        // $activasion=123154646;
-        // // $job = new SendMail($activasion,$request);
-        // dispatch(new SendMail($activasion,$request));
+        $request['name']="bokai";
+        $request['email']="bokai830124@gmail.com";
+        $activasion=123154646;
+        // $job = new SendMail($activasion,$request);
+        //php artisan queue:work
+        dispatch(new SendMail($activasion,$request));
 
         // SendMail::dispatch($activasion,$request)
         //         // ->delay(now()->addMinutes(5));

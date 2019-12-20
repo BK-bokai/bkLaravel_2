@@ -1,7 +1,7 @@
 <header>
    <nav class="nav-extended menu">
       <div class="nav-wrapper">
-         <a href="#" class="center brand-logo">
+         <a href="#" class="brand-logo">
             <div>
                <i class="large material-icons">account_circle</i>
                BK-home
@@ -14,10 +14,13 @@
             <li><a href="{{url('admin/img')}}">編輯照片</a></li>
             <!-- <li><a href="{{url('admin/work')}}">編輯作品集</a></li> -->
             <li><a href="{{route('admin.message')}}">聊天區</a></li>
+            <li><a href="{{route('admin.TextEdit')}}">文章編輯</a></li>
             <li><a href="{{url('admin/member')}}">會員管理</a></li>
+            <!-- <li class="user"><a href="#">{{ $name }} 你好!!</a></li> -->
+            <li><a href="#">{{ $name }} 你好!!</a></li>
             <li><a href="{{url('admin/logout')}}">登出</a></li>
          </ul>
-         <li class="user"><a href="#">{{ $name }} 你好!!</a></li>
+         
       </div>
       <ul class="sidenav" id="mobile-demo">
          <li><a href="{{route('index')}}">前台首頁</a></li>
@@ -25,6 +28,7 @@
          <li><a href="{{url('admin/img')}}">編輯照片</a></li>
          <!-- <li><a href="{{url('admin/work')}}">編輯作品集</a></li> -->
          <li><a href="{{route('admin.message')}}">聊天區</a></li>
+         <li><a href="{{route('admin.TextEdit')}}">文章編輯</a></li>
          <li><a href="{{url('admin/member')}}">會員管理</a></li>
          <li><a href="{{url('admin/logout')}}">登出</a></li>
       </ul>

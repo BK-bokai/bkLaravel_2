@@ -1,9 +1,9 @@
 $(document).ready(function () {
-
   $('button#index_img').on('click', function () {
     let url = $(this).attr('url');
     window.location.href = url;
   })
+
 
 
   $("textarea[name='index_content_one'],textarea[name='index_content_two'],textarea[name='student_content'],textarea[name='worker_content']").on('keyup', function () {
@@ -28,13 +28,11 @@ $(document).ready(function () {
       success: function (data) {
         console.log(data);
         console.log("ajax success");
-        
-        if(data['change']==1)
-        {
+
+        if (data['change'] == 1) {
           $("button#index_submit").removeClass('disabled');
         }
-        else
-        {
+        else {
           $("button#index_submit").addClass('disabled');
         }
       },
@@ -44,6 +42,7 @@ $(document).ready(function () {
     })
 
   })
+
 
   $('button#index_submit').on('click', function () {
     let index_content_one = $("textarea[name='index_content_one']").val();

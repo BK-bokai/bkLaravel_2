@@ -19,17 +19,27 @@ main {
     font-weight: bold;
 }
 
+/* 修好menu */
 nav.nav-extended.menu {
     background-color: rgba(0, 0, 0, 0.8);
+    height: 100%;
 }
 
-/* .menu ul li a {
+
+a.brand-logo{
+    margin: 0;
+    margin-left: 2%;
+}
+
+.menu ul li a {
     font-size: 20px;
-} */
-
-.menu ul li {
-    line-height: 58px;
+    margin-top: 0%;
 }
+/* 修好menu */
+
+/* .menu ul li {
+    line-height: 58px;
+} */
 
 .text {
     /* width: 400px;
@@ -121,10 +131,10 @@ a {
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.8) !important;
 }
 
-.input-field input[type=text], .materialize-textarea:focus:not([readonly]) {
+/* .input-field input[type=text], .materialize-textarea:focus:not([readonly]) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.8) !important;
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.8) !important;
-}
+} */
 
 .errorun input[type=text]:focus+label, .materialize-textarea:focus:not([readonly])+label {
     color: rgba(255, 0, 0, 0.8) !important;
@@ -215,6 +225,10 @@ button.cancel.btn.btn-lg.btn-default {
 
 button.confirm.btn.btn-lg.btn-primary {
     background-color: #e57373;
+}
+
+button.confirm.btn.btn-lg.btn-primary.swalSuccess{
+    background-color: #26a69a
 }
 
 div.register_form {

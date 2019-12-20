@@ -82,5 +82,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+
+    // Route::get('textEdit','backend\IndexController@index')->name('TextEdit');
+    Route::get('textEdit','backend\textEditController@index')->name('TextEdit');
+
+    Route::post('postTextEdit','backend\textEditController@post')->name('postTextEdit');
 });
 

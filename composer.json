@@ -9,11 +9,13 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "facebook/graph-sdk": "^5.7",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.0",
+        "laravel/socialite": "^4.3",
         "laravel/tinker": "^1.0",
-        "pusher/pusher-php-server": "~3.0",
-        "predis/predis": "*"
+        "predis/predis": "*",
+        "pusher/pusher-php-server": "~3.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
@@ -61,4 +63,5 @@
             "@php artisan key:generate --ansi"
         ]
     }
+
 }

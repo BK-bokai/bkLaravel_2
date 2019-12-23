@@ -35,6 +35,16 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
+// Route::get('fbLogin', 'FbLoginController@fblogin');
+// Route::get('fbcallback', 'FbLoginController@fbcallback');
+// Route::get('fbLogin', 'FbLoginController@fblogin');
+
+Route::get('/Facebook/redirect/{provider}', 'FbLoginController@redirect')->name('fbLogin');
+Route::get('/FBcallback/{provider}', 'FbLoginController@callback');
+// Route::get('/callback/{provider}', 'FbLoginController@callback');
+// https://localhost/php/bkLaravel_2/public/callback/facebook
+// https://localhost/php/bkLaravel_2/public/Facebook/redirect/facebook
+
 
 
 

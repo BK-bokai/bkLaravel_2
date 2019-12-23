@@ -38,6 +38,10 @@
             <button class="btn waves-effect waves-light test" type="submit">登入
                <i class="material-icons right">send</i>
             </button>
+            <h5><a href="{{ route('fbLogin',['facebook']) }}"><i class="fab fa-facebook-square"></i>使用Facebook登入</a></h5>
+
+            <h5>忘記密碼了?</h5>
+            <h5>點選<a href="{{ route('password.request') }}">這裡</a>重置密碼</h5>
             @if (session('status'))
             <p class="teal-text"> {{ session('status') }}  <p>
             @endif

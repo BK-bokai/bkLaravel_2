@@ -31,9 +31,9 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '416064182386006',
-        'client_secret' => '8c7ca4d440ae32be95d87cebba3c1ca9',
-        'redirect' => 'https://localhost/php/bkLaravel_2/public/FBcallback/facebook',
-      ], 
+        'client_id' => env('FACEBOOK_ID'),
+        'client_secret' => env('FACEBOOK_SECRET'),
+        'redirect' => env('FACEBOOK_REDIRECT'),
+    ],
 
 ];

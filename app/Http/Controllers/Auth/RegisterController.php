@@ -110,6 +110,6 @@ class RegisterController extends Controller
         $this->RegisterService->sendServer($user->email,$activasion);
 
         return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
+            ?: redirect($this->redirectPath())->with('status', '已註冊成功，請至信箱收取確認信件');
     }
 }

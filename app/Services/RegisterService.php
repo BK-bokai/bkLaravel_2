@@ -129,9 +129,9 @@ class RegisterService
     }
 
 
-    public function sendServer($email,$activasion)
+    public function sendServer($email,$url)
     {
         Session::put('success', '註冊成功，請至信箱收取確認信');
-        dispatch(new SendRegisterMail($email,$activasion));
+        dispatch(new SendRegisterMail($email,$url));
     }
 }

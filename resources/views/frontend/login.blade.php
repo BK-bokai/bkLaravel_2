@@ -42,6 +42,7 @@
 
             <h5>忘記密碼了?</h5>
             <h5>點選<a href="{{ route('password.request') }}">這裡</a>重置密碼</h5>
+            <h5>點選<a href="{{ route('register') }}">這裡</a>進行註冊</h5>
             @if (session('status'))
             <p class="teal-text"> {{ session('status') }}  <p>
             @endif

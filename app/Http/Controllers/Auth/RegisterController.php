@@ -97,17 +97,20 @@ class RegisterController extends Controller
         if ($user_name != null || $user_username != null || $user_email != null) {
             return $this->RegisterService->confirm($request);
         }
+        
         $activasion = md5(uniqid(rand(), true));
         $request['active'] = $activasion;
 
+        
+        $url = route('confirm',['active'=>$activasion]);
+        // return $url;
 
         $this->RegisterService->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
 
         // $this->RegisterService->send($activasion,$request);
-
-        $this->RegisterService->sendServer($user->email,$activasion);
+        $this->RegisterService->sendServer($user->email,$url);
 
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath())->with('status', '已註冊成功，請至信箱收取確認信件');

@@ -48,9 +48,9 @@ class User extends Authenticatable
         $this->notify(new ResetPassword($token));
     }
 
-    public function sendRegisterNotification($activasion)
+    public function sendRegisterNotification($url)
     {
-        $this->notify(new RegisterUser($activasion));
+        $this->notify(new RegisterUser($url));
     }
 
     public function message()

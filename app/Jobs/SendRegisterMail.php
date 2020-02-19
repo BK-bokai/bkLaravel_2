@@ -13,7 +13,7 @@ class SendRegisterMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $email;
-    protected $activasion;
+    protected $url;
 
 
     /**
@@ -21,10 +21,10 @@ class SendRegisterMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($email,$activasion)
+    public function __construct($email,$url)
     {
         $this->email = $email;
-        $this->activasion = $activasion;
+        $this->url = $url;
     }
 
     /**
@@ -36,6 +36,6 @@ class SendRegisterMail implements ShouldQueue
     {
         //找到用戶之後，對於這個用戶去進行通知function
         $user = User::where('email',$this->email)->first();
-        $user->sendRegisterNotification($this->activasion);
+        $user->sendRegisterNotification($this->url);
     }
 }

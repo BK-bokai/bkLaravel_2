@@ -42,32 +42,8 @@ class IndexController extends Controller
     }
 
     function test()
-    {
-     
-
-        // $redis = app('redis.connection');
-        // return $redis->lrange('queues:$queueName', 0, -1);
-
-
-
-        $request['name']="bokai";
-        $request['email']="bokai830124@gmail.com";
-        $activasion=123154646;
-        // $job = new SendMail($activasion,$request);
-        //php artisan queue:work
-        dispatch(new SendMail($activasion,$request));
-
-        // SendMail::dispatch($activasion,$request)
-        //         // ->delay(now()->addMinutes(5));
-        //         ->onQueue('database');
-        
-
-        // $request['name']="bokai";
-        // $request['email']="bokai830124@gmail.com";
-        // $activasion=123154646;
-        // $this->RegisterService->send($activasion,$request);
-        // return $this->RegisterService->GetAll();
-
-
+    {   
+        $title = '網頁測試';
+        return view('test',compact('title'));
     }
 }
